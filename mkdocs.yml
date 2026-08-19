@@ -1,0 +1,36 @@
+site_name: Tutoriais e Scripts - Márcio Wilson
+site_description: Repositório de tutoriais, scripts de bioinformática e documentações
+theme:
+  name: material
+  logo: assets/logo.png
+  favicon: assets/logo.png
+  features:
+    - navigation.tabs
+    - content.code.copy
+  palette:
+    - scheme: default
+      primary: teal
+      accent: cyan
+      toggle:
+        icon: material/brightness-7 
+        name: Mudar para modo escuro
+    - scheme: slate
+      primary: teal
+      accent: cyan
+      toggle:
+        icon: material/brightness-4
+        name: Mudar para modo claro
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+
+nav:
+  - Início: index.md
+  - Ferramentas e Infra:
+    - Singularity (Apptainer): singularity_tutorial.md
+    - MkDocs e GitHub Pages: tutorial_mkdocs.md
