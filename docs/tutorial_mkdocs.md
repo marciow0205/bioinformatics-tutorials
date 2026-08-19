@@ -1,109 +1,88 @@
 # Como criar um site de documentação com MkDocs e publicar no GitHub Pages
 
-Neste tutorial, você vai aprender a transformar arquivos Markdown (`.md`) em um site interativo e profissional usando o **MkDocs** (com o tema *Material for MkDocs*) e hospedá-lo gratuitamente no **GitHub Pages**.
+O MkDocs é um gerador de sites estáticos. Ele converte textos simples escritos em Markdown (`.md`) num site interativo, rápido e profissional. Combinado com o tema **Material for MkDocs**, ele oferece botões de cópia, modo escuro e caixas de alerta.
 
-Esta é uma excelente forma de documentar pipelines de análise de dados, scripts e criar um portfólio acessível.
+## 1. Instalação e Criação do Projeto
 
-## 1. O que é o MkDocs?
-
-O MkDocs é um gerador de sites estáticos rápido e simples, construído em Python. Ele pega arquivos de texto escritos em Markdown e os transforma em um site completo. O tema **Material for MkDocs** adiciona um visual moderno, abas interativas, botões de cópia de código e suporte a modo claro/escuro.
-
-## 2. Instalação
-
-Você precisará do Python instalado. Abra o terminal e instale o pacote via `pip`:
-
+No seu terminal, instale a ferramenta usando o Python:
 ```bash
 pip install mkdocs-material
 ```
 
-## 3. Inicializando o Projeto
-
-Vá até a pasta onde deseja criar seu site e execute:
-
+Crie a estrutura base do site:
 ```bash
 mkdocs new meus-tutoriais
 cd meus-tutoriais
 ```
+Isso gera o arquivo `mkdocs.yml` (configurações gerais) e a pasta `docs/` com seu `index.md`.
 
-Isso criará a seguinte estrutura:
-```text
-meus-tutoriais/
-├── mkdocs.yml    # Arquivo principal de configuração
-└── docs/
-    └── index.md  # Sua página inicial
-```
+## 2. Testando Localmente
 
-## 4. Personalizando o Site (`mkdocs.yml`)
-
-Para deixar o site com a sua identidade visual (incluindo logo, paleta de cores e funcionalidades extras), edite o arquivo `mkdocs.yml`. Exemplo de configuração:
-
-```yaml
-site_name: Tutoriais e Scripts - Márcio Wilson
-site_description: Repositório de tutoriais, scripts de bioinformática e documentações
-theme:
-  name: material
-  logo: assets/logo.png      # Coloque sua logo (fundo transparente) em docs/assets/
-  favicon: assets/logo.png
-  features:
-    - navigation.tabs        # Menus em abas
-    - content.code.copy      # Botão de copiar código
-  palette:
-    - scheme: default
-      primary: teal          # Cor principal
-      accent: cyan
-      toggle:
-        icon: material/brightness-7 
-        name: Mudar para modo escuro
-    - scheme: slate
-      primary: teal
-      accent: cyan
-      toggle:
-        icon: material/brightness-4
-        name: Mudar para modo claro
-
-markdown_extensions:
-  - admonition
-  - pymdownx.details
-  - pymdownx.superfences
-  - pymdownx.highlight:
-      anchor_linenums: true
-      line_spans: __span
-
-nav:
-  - Início: index.md
-  - Ferramentas e Infra:
-    - Singularity (Apptainer): tutorial_singularity.md
-    - MkDocs e GitHub Pages: tutorial_mkdocs.md
-```
-
-## 5. Testando Localmente
-
-Antes de publicar, veja como o site está ficando na sua própria máquina. Execute:
-
+Para ver as mudanças em tempo real enquanto edita os textos, rode:
 ```bash
 mkdocs serve
 ```
-Abra o link (geralmente `http://127.0.0.1:8000`) no seu navegador. O site será atualizado automaticamente sempre que você salvar um arquivo `.md`.
+Acesse `http://127.0.0.1:8000` no seu navegador. O site recarrega automaticamente ao salvar os arquivos.
 
-## 6. Publicando no GitHub Pages (Gratuito)
+## 3. Como Publicar no GitHub Pages (Passo a Passo)
 
-O GitHub Pages permite hospedar sites estáticos de repositórios públicos gratuitamente. A grande vantagem é que o MkDocs automatiza o processo de publicação com um único comando.
+O GitHub Pages é um serviço gratuito do GitHub que hospeda sites estáticos a partir de repositórios. O MkDocs tem um atalho nativo para automatizar toda a publicação.
 
-**Passo A:** Inicie o repositório Git e conecte ao GitHub (lembre-se de criar um repositório vazio no GitHub primeiro):
+### Etapa A: Criar o repositório no site do GitHub
+Para que o site fique online, ele precisa morar em um repositório no GitHub.
+
+1. Acesse o site do [GitHub](https://github.com/) e faça login.
+2. No canto superior direito, clique no sinal de **`+`** e escolha **New repository**.
+3. Em **Repository name**, dê um nome curto (ex: `tutoriais-scripts`).
+4. Em **Public/Private**, certifique-se de deixar como **Public** (o Pages gratuito exige repositórios públicos).
+5. **Muito Importante:** Deixe **DESMARCADAS** as opções *Add a README file*, *Add .gitignore* e *Choose a license*. O repositório precisa nascer completamente vazio.
+6. Clique no botão verde **Create repository**.
+
+O GitHub mostrará uma página cheia de códigos. Copie a URL do seu repositório (ex: `https://github.com/SeuUsuario/tutoriais-scripts.git`).
+
+### Etapa B: Conectar a pasta do seu computador ao GitHub
+Abra o seu terminal na pasta do seu site (a pasta `meus-tutoriais` onde está o `mkdocs.yml`) e rode estes comandos em ordem:
+
 ```bash
+# 1. Transforma sua pasta num repositório Git local
 git init
+
+# 2. Adiciona todos os seus arquivos (Markdown, logo, mkdocs.yml)
 git add .
-git commit -m "Site inicializado"
+
+# 3. Salva uma "fotografia" do estado atual dos arquivos
+git commit -m "Meu primeiro site estruturado"
+
+# 4. Renomeia a branch principal para 'main'
 git branch -M main
+
+# 5. Conecta sua pasta local ao repositório vazio que você acabou de criar no site
+# Lembre-se de substituir pela URL que você copiou no Passo A!
 git remote add origin https://github.com/SEU_USUARIO/SEU_REPOSITORIO.git
+
+# 6. Envia os arquivos "crus" (.md, .yml) para o GitHub
 git push -u origin main
 ```
 
-**Passo B:** Construa e publique o site:
+### Etapa C: A Mágica do MkDocs (Colocando online!)
+Até agora, você enviou os textos crus para o GitHub. Para transformar isso em um site de verdade e publicá-lo, basta rodar **um único comando**:
+
 ```bash
 mkdocs gh-deploy
 ```
 
-Pronto! O MkDocs vai compilar os arquivos e enviá-los para uma branch dedicada chamada `gh-pages`. Em poucos minutos, seu site estará online no endereço `https://SEU_USUARIO.github.io/SEU_REPOSITORIO/`. 
+**O que esse comando faz?**
+Ele lê seus arquivos Markdown, compila todo o HTML/CSS do site e cria automaticamente uma branch oculta no seu repositório chamada `gh-pages`. O GitHub percebe essa branch e coloca o site no ar instantaneamente.
 
-Sempre que adicionar um novo tutorial (ou criar novas documentações para pipelines como RNA-Seq, por exemplo), basta rodar `mkdocs gh-deploy` novamente.
+**Como acessar o site?**
+O endereço será sempre neste formato:
+`https://SEU_USUARIO.github.io/NOME_DO_REPOSITORIO/`
+
+*Nota: Na primeira vez, o GitHub pode levar até 2 minutinhos para terminar de processar o link. É só recarregar a página.*
+
+---
+
+**Sempre que quiser atualizar o site:**
+1. Edite ou adicione novos arquivos `.md` na pasta `docs/`.
+2. Adicione os novos arquivos no índice `nav:` dentro do `mkdocs.yml`.
+3. Abra o terminal e rode `mkdocs gh-deploy` novamente. Simples assim!
